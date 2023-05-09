@@ -3,7 +3,7 @@ window.addEventListener("DOMContentLoaded",()=>{
         .get('https://crudcrud.com/api/b2765a7fa96b47d280f60e2fa9660de7/taskData')
         .then(res => {
                 for(var i=0;i<res.data.length;i++){
-                    if(res.data.flag){
+                    if(res.data[i].flag){
                         printTaskDone(res.data[i],res.data[i]._id)
                     } else{
                         printTask(res.data[i],res.data[i]._id)

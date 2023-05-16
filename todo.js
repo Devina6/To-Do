@@ -1,11 +1,11 @@
 window.addEventListener("DOMContentLoaded",()=>{
     axios
-        .get('https://crudcrud.com/api/b2765a7fa96b47d280f60e2fa9660de7/taskData')
+        .get('https://crudcrud.com/api/ae5a321a02be4ab590cd73a164c2b93c/taskData')
         .then(res => {
                 for(var i=0;i<res.data.length;i++){
                     if(res.data[i].flag){
                         printTaskDone(res.data[i],res.data[i]._id)
-                    } else{
+                    }else {
                         printTask(res.data[i],res.data[i]._id)
                     }
                 }
@@ -14,15 +14,14 @@ window.addEventListener("DOMContentLoaded",()=>{
 })
 
 
-function details(addTask){
+async function details(addTask){
     let obj = {
         task:document.getElementById("task").value,
         desc:document.getElementById("description").value,
         flag:false
     };
-    axios.post('https://crudcrud.com/api/b2765a7fa96b47d280f60e2fa9660de7/taskData', obj)
-        .then(res => printTask(res.data,res.data._id))
-        .catch(err => console.log(err))
+    let res = await axios.post('https://crudcrud.com/api/ae5a321a02be4ab590cd73a164c2b93c/taskData', obj)
+    printTask(res.data,res.data._id)
 }
 
 function printTask(obj,id){
@@ -68,7 +67,7 @@ function printTaskDone(obj,id){
 var tBody = document.getElementById('tableBody');
 tBody.addEventListener('click',removeItem);
 
-function removeItem(e){
+async function removeItem(e){
     if(e.target.classList.contains('delete')){
         if(confirm('Are you sure?')){
             
@@ -76,37 +75,26 @@ function removeItem(e){
             const _id = e.target.parentElement.getAttribute('data-key');
         
             
-            let url = "https://crudcrud.com/api/b2765a7fa96b47d280f60e2fa9660de7/taskData/"+ _id
-            axios
-                .delete(url)
-                .then(res => console.log(res))
-                .catch(err => console.log(err))
-            
+            let url = "https://crudcrud.com/api/ae5a321a02be4ab590cd73a164c2b93c/taskData/"+ _id
+            let res1 = await axios.delete(url)
+            console.log(res1)
             tBody.removeChild(tRow);
         }
     }
 }
 
 
-function doneTask(e){
+async function doneTask(e){
     let tRow = e.target.parentElement;
     const key = e.target.parentElement.getAttribute('data-key');
-    const link = 'https://crudcrud.com/api/b2765a7fa96b47d280f60e2fa9660de7/taskData/'+key
+    const link = 'https://crudcrud.com/api/ae5a321a02be4ab590cd73a164c2b93c/taskData/'+key
     
-    axios
-        .get(link)
-        .then(res=>{
-        let obj = res.data;
-        printTaskDone(res.data,res.data._id)
-        axios
-            .put(link,{
-                task:obj.task,
-                desc:obj.desc,
-                flag:true
-        })
-    })
-        .catch(err=>console.log(err))
-    
+    let res2 = await axios.get(link)
+    let obj = res2.data
+    printTaskDone(res2.data,res2.data._id)
+    let res3 = await axios.put(link,{task:obj.task,
+                                     desc:obj.desc,
+                                     flag:true})
     
     tBody.removeChild(tRow);
 }

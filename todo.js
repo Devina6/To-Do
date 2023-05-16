@@ -1,17 +1,13 @@
-window.addEventListener("DOMContentLoaded",()=>{
-    axios
-        .get('https://crudcrud.com/api/ae5a321a02be4ab590cd73a164c2b93c/taskData')
-        .then(res => {
-                for(var i=0;i<res.data.length;i++){
-                    if(res.data[i].flag){
-                        printTaskDone(res.data[i],res.data[i]._id)
-                    }else {
-                        printTask(res.data[i],res.data[i]._id)
-                    }
-                }
+window.addEventListener("DOMContentLoaded",async()=>{
+    let response = await axios.get('https://crudcrud.com/api/4687bb763ee04137b1daa7e6113fd784/taskData')
+    for(var i=0;i<response.data.length;i++){
+        if(response.data[i].flag){
+            printTaskDone(response.data[i],response.data[i]._id)
+        }else {
+            printTask(response.data[i],response.data[i]._id)
+        }
+    }
     })
-        .catch(err => console.log(err))
-})
 
 
 async function details(addTask){
@@ -20,7 +16,7 @@ async function details(addTask){
         desc:document.getElementById("description").value,
         flag:false
     };
-    let res = await axios.post('https://crudcrud.com/api/ae5a321a02be4ab590cd73a164c2b93c/taskData', obj)
+    let res = await axios.post('https://crudcrud.com/api/4687bb763ee04137b1daa7e6113fd784/taskData', obj)
     printTask(res.data,res.data._id)
 }
 
@@ -75,7 +71,7 @@ async function removeItem(e){
             const _id = e.target.parentElement.getAttribute('data-key');
         
             
-            let url = "https://crudcrud.com/api/ae5a321a02be4ab590cd73a164c2b93c/taskData/"+ _id
+            let url = "https://crudcrud.com/api/4687bb763ee04137b1daa7e6113fd784/taskData/"+ _id
             let res1 = await axios.delete(url)
             console.log(res1)
             tBody.removeChild(tRow);
@@ -87,7 +83,7 @@ async function removeItem(e){
 async function doneTask(e){
     let tRow = e.target.parentElement;
     const key = e.target.parentElement.getAttribute('data-key');
-    const link = 'https://crudcrud.com/api/ae5a321a02be4ab590cd73a164c2b93c/taskData/'+key
+    const link = 'https://crudcrud.com/api/4687bb763ee04137b1daa7e6113fd784/taskData/'+key
     
     let res2 = await axios.get(link)
     let obj = res2.data
